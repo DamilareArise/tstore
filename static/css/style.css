@@ -1,0 +1,15 @@
+h1 {
+    color: green;
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.hero-section {
+    height: 60dvh;
+    background-image: url("https://th.bing.com/th/id/R.3387f0b57d6fdbff81f902d69d18a77b?rik=ctJKFJCbtv2Odg&riu=http%3a%2f%2fwww.clickslice.co.uk%2fwp-content%2fuploads%2f2024%2f05%2f7-useful-tips-to-reduce-shopping-cart-abandonment.jpg&ehk=gvjiGW0BtSiQoH%2ftH3bDilmn8e2sbkhMMdTNFJfrBP8%3d&risl=&pid=ImgRaw&r=0");
+    background-size: cover;
+    background-position: center;
+}
