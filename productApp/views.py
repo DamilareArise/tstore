@@ -1,5 +1,5 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
+from .models import Product, Category
 # Create your views here.
 
 products = [
@@ -137,6 +137,14 @@ def homePageView(request):
         )
 
 def allProductView(request):
+  products = Product.objects.all()
+  # products = Product.objects.filter(title = "PRODUCT 1")
+  # products = Product.objects.filter(title__iexact = "PRODUCT 1")
+  # products = Product.objects.filter(price__lte = 1000 )
+  # products = Product.objects.exclude(price__lte = 1000)
+  # product = Product.objects.get(id = 40)
+  # product = get_object_or_404(Product, id=40)
+  # print(product.description)
   
   return render(
     request,
@@ -145,3 +153,5 @@ def allProductView(request):
       "products": products
     }
   )
+  
+  
