@@ -1,0 +1,27 @@
+{% extends "common.html" %}
+    {% block title %} Tstore-product-{{product.title}} {% endblock title %}
+    {% block content %}
+    {% load static %}
+
+        <div class="container my-2">
+            <div class="card col-10 col-md-6 m-auto">
+                {% if product.image %}
+                    <img src="{{product.image.url}}" class="card-img-top" alt="...">
+                {% else %}
+                    <img src="" class="card-img-top" alt="...">
+                {% endif %}
+                <div class="card-body">
+                    
+                    <h5 class="card-title">{{product.title}}</h5>
+                    <p class="card-text">{{product.description}}</p>
+                    <div class="d-flex justify-content-between">
+                        <p>#{{product.price}}</p>
+                        <p>{{product.quantity}} left</p>
+                    </div>
+                    <a href="#" class="btn btn-dark">Add to cart</a>
+                </div>
+            </div>
+        </div>
+
+
+    {% endblock %}

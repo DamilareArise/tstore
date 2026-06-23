@@ -5,9 +5,13 @@
     
     <section class="container my-3">
         <h3 class="text-center">Available Products</h3>
+        {% comment %} create product {% endcomment %}
+        <a href="{% url "add-product" %}" class="btn btn-dark">Create Product</a>
+
         <div class="row">
             {% for product in products %}
             <div class="col-10 col-md-3 mt-3">
+                <a href="{% url "single-product" product.id %}" class="text-decoration-none text-black">
                 <div class="card" style="width: 18rem;">
                     {% if product.image %}
                         <img src="{{product.image.url}}" class="card-img-top" alt="...">
@@ -17,7 +21,7 @@
                     <div class="card-body">
                         
                         <h5 class="card-title">{{product.title}}</h5>
-                        <p class="card-text">{{product.description}}</p>
+                        <p class="card-text">{{product.description|truncatewords:10}}</p>
                         <div class="d-flex justify-content-between">
                             <p>#{{product.price}}</p>
                             <p>{{product.quantity}} left</p>
@@ -25,6 +29,7 @@
                         <a href="#" class="btn btn-dark">Add to cart</a>
                     </div>
                 </div>
+                </a>
             </div>
             {% endfor %}    
     </section>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 # Create your views here.
 
@@ -125,14 +125,13 @@ products = [
   }]
 
 def homePageView(request):
-    username = "Damilare"
+    products = Product.objects.all()[:4]
     
     return render(
         request, 
         template_name="index.html",
         context={
-                "username": username,
-                "products": products[:4]
+                "products": products
             }
         )
 
@@ -155,3 +154,28 @@ def allProductView(request):
   )
   
   
+def singleProduct(request, id):
+  product = get_object_or_404(Product, id=id)
+  
+  return render(
+    request,
+    template_name="single_product.html",
+    context={
+      "product": product
+    }
+  )
+  
+  
+  
+def addProduct(request):
+  if request.method == 'POST':
+    print(request.POST)
+    print(request.FILES)
+    
+    return redirect('home')
+  
+  else:
+    return render(
+      request,
+      template_name="product_form.html"
+    )
