@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
+from .forms import ProductForm
 # Create your views here.
 
 products = [
@@ -169,13 +170,35 @@ def singleProduct(request, id):
   
 def addProduct(request):
   if request.method == 'POST':
-    print(request.POST)
-    print(request.FILES)
+    data = request.POST
+    media = request.FILES
+    # print(data)
+    # print(media)
+    # category = get_object_or_404(Category, id = data.get('category'))
+    # Product.objects.create(
+    #   title = data.get('title'),
+    #   description = data.get('description'),
+    #   price = data.get('price'),
+    #   quantity = data.get('quantity'),
+    #   category = category,
+    #   image = media.get('image')
+    # )
+    
+    form = ProductForm(data, media)
+    if form.is_valid():
+      form.save()
     
     return redirect('home')
   
   else:
+    categories = Category.objects.all()
+    form = ProductForm()
+    
     return render(
       request,
-      template_name="product_form.html"
+      template_name="product_form.html",
+      context={
+        'categories': categories,
+        'form': form
+      }
     )

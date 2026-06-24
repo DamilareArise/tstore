@@ -2,17 +2,34 @@
     {% block title %} Tstore-products {% endblock title %}
     {% block content %}
     {% load static %}
+    {% load crispy_forms_tags %}
 
     <div class="container my-2 col-10 col-md-4 border p-3 rounded">
         <h3 class="text-center">Product Form</h3>
         <form action="{% url "add-product" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="text" placeholder="Title" class="form-control mb-2" name='title'>
+            {% comment %} <input type="text" placeholder="Title" class="form-control mb-2" name='title' required>
             <textarea name="description" id="" placeholder="Description" class="form-control mb-2"></textarea>
             <input type="number" placeholder="Price" class="form-control mb-2" name='price'>
             <input type="number" placeholder="Quantity" class="form-control mb-2" name='quantity'>
+            <select name="category" id="" class="form-control mb-2">
+                <option value="">Choose category</option>
+                {% for category in categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                {% endfor %}
+            </select>
             <label for="">Product Image</label>
-            <input type="file" class="form-control mb-2" name='image'>
+            <input type="file" class="form-control mb-2" name='image'> {% endcomment %}
+
+
+
+
+            {% comment %} {% for field in form %}
+                {{field.label}}
+            {% endfor %} {% endcomment %}
+
+
+            {{form|crispy}}
             <button class="btn btn-dark">Create</button>
         </form>
     </div>
