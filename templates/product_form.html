@@ -6,7 +6,7 @@
 
     <div class="container my-2 col-10 col-md-4 border p-3 rounded">
         <h3 class="text-center">Product Form</h3>
-        <form action="{% url "add-product" %}" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% comment %} <input type="text" placeholder="Title" class="form-control mb-2" name='title' required>
             <textarea name="description" id="" placeholder="Description" class="form-control mb-2"></textarea>
@@ -30,7 +30,7 @@
 
 
             {{form|crispy}}
-            <button class="btn btn-dark">Create</button>
+            <button class="btn btn-dark">Save</button>
         </form>
     </div>
 

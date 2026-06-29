@@ -19,6 +19,32 @@
                         <p>{{product.quantity}} left</p>
                     </div>
                     <a href="#" class="btn btn-dark">Add to cart</a>
+
+                    <hr>
+                    <a href="{% url "edit-product" product.id %}" class="btn btn-primary">Edit</a>
+
+                    
+                    <button class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deleteProduct{{product.id}}">Delete</button>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteProduct{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete {{product.title}}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete {{product.title}}?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <a href="{% url "delete-product" product.id %}" class="btn btn-danger">Delete</a>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>

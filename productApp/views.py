@@ -167,7 +167,6 @@ def singleProduct(request, id):
   )
   
   
-  
 def addProduct(request):
   if request.method == 'POST':
     data = request.POST
@@ -199,6 +198,34 @@ def addProduct(request):
       template_name="product_form.html",
       context={
         'categories': categories,
+        'form': form
+      }
+    )
+    
+    
+def deleteProduct(request, id):
+  product = get_object_or_404(Product, id=id)
+  product.delete()
+  
+  return redirect('all-product')
+
+
+def editProduct(request, id):
+  product = get_object_or_404(Product, id=id)
+  
+  if request.method == 'POST':
+    form = ProductForm(request.POST, request.FILES, instance=product)
+    if form.is_valid:
+      form.save()
+      
+    return redirect('all-product')
+  
+  else:
+    form = ProductForm(instance=product)
+    return render(
+      request,
+      template_name="product_form.html",
+      context={
         'form': form
       }
     )
