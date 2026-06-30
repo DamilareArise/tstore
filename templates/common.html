@@ -26,9 +26,28 @@
                 <li class="nav-item">
                 <a class="nav-link" href="#">Pricing</a>
                 </li>
+                {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Hello, {{request.user.username}}
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <form class="" action="{% url "logout" %}" method="post">
+                                {% csrf_token %}
+                                <button class="dropdown-item text-danger">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
                 <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                <a class="nav-link" href="{% url "login" %}">Login</a>
                 </li>
+                {% endif %}
             </ul>
             </div>
         </div>
