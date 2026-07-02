@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 from .forms import ProductForm
+from django.contrib.auth.decorators import user_passes_test, login_required
 # Create your views here.
 
 products = [
@@ -125,6 +126,11 @@ products = [
     }
   }]
 
+
+def staff_auth(user):
+  return user.is_authenticated and user.is_staff
+
+
 def homePageView(request):
     products = Product.objects.all()[:4]
     
@@ -154,7 +160,7 @@ def allProductView(request):
     }
   )
   
-  
+@login_required
 def singleProduct(request, id):
   product = get_object_or_404(Product, id=id)
   
@@ -166,7 +172,7 @@ def singleProduct(request, id):
     }
   )
   
-  
+@user_passes_test(staff_auth)
 def addProduct(request):
   if request.method == 'POST':
     data = request.POST
@@ -202,7 +208,8 @@ def addProduct(request):
       }
     )
     
-    
+
+@user_passes_test(staff_auth)
 def deleteProduct(request, id):
   product = get_object_or_404(Product, id=id)
   product.delete()
@@ -210,6 +217,7 @@ def deleteProduct(request, id):
   return redirect('all-product')
 
 
+@user_passes_test(staff_auth)
 def editProduct(request, id):
   product = get_object_or_404(Product, id=id)
   

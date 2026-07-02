@@ -6,7 +6,9 @@
     <section class="container my-3">
         <h3 class="text-center">Available Products</h3>
         {% comment %} create product {% endcomment %}
-        <a href="{% url "add-product" %}" class="btn btn-dark">Create Product</a>
+         {% if request.user.is_staff %}
+            <a href="{% url "add-product" %}" class="btn btn-dark">Create Product</a>
+         {% endif %}
 
         <div class="row">
             {% for product in products %}

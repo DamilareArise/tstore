@@ -20,11 +20,12 @@
                     </div>
                     <a href="#" class="btn btn-dark">Add to cart</a>
 
+                    {% if request.user.is_staff %}
                     <hr>
                     <a href="{% url "edit-product" product.id %}" class="btn btn-primary">Edit</a>
 
-                    
                     <button class="btn btn-danger"  data-bs-toggle="modal" data-bs-target="#deleteProduct{{product.id}}">Delete</button>
+                    {% endif %}
 
 
                     <!-- Modal -->
