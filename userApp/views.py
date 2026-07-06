@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SignupForm
+from django.contrib.auth.models import User
+from .models import UserProfile
 
 # Create your views here.
 
@@ -20,3 +22,18 @@ def signupView(request):
                 'form': form
             }
         )
+        
+
+
+def userProfileView(request):
+    user = request.user
+    profile = get_object_or_404(UserProfile, user=user)
+    
+    return render(
+        request,
+        template_name="userApp/profile.html",
+        context={
+            "profile":profile
+        }
+    )
+    

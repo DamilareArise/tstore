@@ -1,0 +1,36 @@
+{% extends "common.html" %}
+    {% block title %} Tstore-profile {% endblock title %}
+    {% block content %}
+    {% load static %}
+
+    <div class="col-md-6 row my-5 mx-auto border shadow-sm py-3" style="height: 30dvh">
+        <div class="col-md-4 h-100">
+            {% if profile.profile_picture %}
+                <img src="{{profile.profile_picture.url}}" alt="" height="100%">
+            {% else %}
+                <img src="https://th.bing.com/th/id/R.f6f9bb7836e7652e98cb811351f10102?rik=SNsIkH%2brdq%2bCNA&pid=ImgRaw&r=0" alt="" height="100%" >
+            {% endif %}
+        </div>
+        <div class="col-md-8 h-100">
+            <div class="container h-100 d-flex flex-column gap-3">
+                <div>
+                    <b>Fullname: </b> <span>{{profile.user.first_name}} {{profile.user.last_name}}</span>
+                </div>
+                <div>
+                    <b>Email: </b> <span>{{profile.user.email}}</span>
+                </div>
+                <div>
+                    <b>Address: </b> <span>{{profile.address}}</span>
+                </div>
+                <div>
+                    <b>Role(s): </b>
+                    {% for role in profile.roles.all %}
+                        <span>{{role}}</span>,
+                    {% endfor %}
+                </div>
+                <a href="" class="btn btn-dark col-2">Edit</a>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
