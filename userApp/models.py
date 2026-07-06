@@ -11,7 +11,7 @@ class RoleChoices(models.TextChoices):
     ADMIN = 'admin', 'Admin'
     
 class Role(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, choices=RoleChoices.choices, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -21,7 +21,7 @@ class Role(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    address = models.TextField()
+    address = models.TextField(null=True, blank=True)
     roles = models.ManyToManyField(Role, blank=True, related_name="profiles")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,7 +33,8 @@ class UserProfile(models.Model):
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             profile = UserProfile.objects.create(user=instance)
-            profile.roles.add(RoleChoices.CUSTOMER)
+            customerRole = Role.objects.get(name=RoleChoices.CUSTOMER)
+            profile.roles.add(customerRole)
             
 
 
