@@ -8,19 +8,20 @@
     .bg-image {
         background-size: cover;
         background-position: center;
+        height: 200px;
     }
 </style>
 
-<div class="col-md-6 row my-5 mx-auto border shadow-sm p-3" style="height: 30dvh">
+<div class="col-md-6 row my-5 mx-auto border shadow-sm p-3" style="min-height: 30dvh">
     {% if profile.profile_picture %}
-    <div class="col-md-4 h-100 bg-image" style="background-image: url('{{profile.profile_picture.url}}');"></div>
+    <div class="col-md-4 bg-image" style="background-image: url('{{profile.profile_picture.url}}');"></div>
     {% else %}
     <div class="col-md-4 h-100 bg-image"
         style="background-image: url('https://th.bing.com/th/id/R.f6f9bb7836e7652e98cb811351f10102?rik=SNsIkH%2brdq%2bCNA&pid=ImgRaw&r=0');">
     </div>
 
     {% endif %}
-    <div class="col-md-8 h-100">
+    <div class="col-md-8">
         <div class="container h-100 d-flex flex-column gap-3">
             <div>
                 <b>Fullname: </b> <span>{{profile.user.first_name}} {{profile.user.last_name}}</span>

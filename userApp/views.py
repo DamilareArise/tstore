@@ -3,6 +3,7 @@ from .forms import SignupForm, UserForm, ProfileForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Create your views here.
 
@@ -11,6 +12,9 @@ def signupView(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Signup successful. proceed to login.')
+        else:
+            messages.error(request, 'An error occured')
             
         return redirect('login')
     
@@ -38,6 +42,10 @@ def userProfileView(request):
             user_form.save()
             profile_form.save()
             
+            messages.success(request, 'Profile update succesful')
+        else:
+            messages.error(request, 'An error occured') 
+        
         return redirect('profile')
     
     else:
