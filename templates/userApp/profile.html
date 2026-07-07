@@ -1,36 +1,70 @@
 {% extends "common.html" %}
-    {% block title %} Tstore-profile {% endblock title %}
-    {% block content %}
-    {% load static %}
+{% block title %} Tstore-profile {% endblock title %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
 
-    <div class="col-md-6 row my-5 mx-auto border shadow-sm py-3" style="height: 30dvh">
-        <div class="col-md-4 h-100">
-            {% if profile.profile_picture %}
-                <img src="{{profile.profile_picture.url}}" alt="" height="100%">
-            {% else %}
-                <img src="https://th.bing.com/th/id/R.f6f9bb7836e7652e98cb811351f10102?rik=SNsIkH%2brdq%2bCNA&pid=ImgRaw&r=0" alt="" height="100%" >
-            {% endif %}
+<style>
+    .bg-image {
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+
+<div class="col-md-6 row my-5 mx-auto border shadow-sm p-3" style="height: 30dvh">
+    {% if profile.profile_picture %}
+    <div class="col-md-4 h-100 bg-image" style="background-image: url('{{profile.profile_picture.url}}');"></div>
+    {% else %}
+    <div class="col-md-4 h-100 bg-image"
+        style="background-image: url('https://th.bing.com/th/id/R.f6f9bb7836e7652e98cb811351f10102?rik=SNsIkH%2brdq%2bCNA&pid=ImgRaw&r=0');">
+    </div>
+
+    {% endif %}
+    <div class="col-md-8 h-100">
+        <div class="container h-100 d-flex flex-column gap-3">
+            <div>
+                <b>Fullname: </b> <span>{{profile.user.first_name}} {{profile.user.last_name}}</span>
+            </div>
+            <div>
+                <b>Email: </b> <span>{{profile.user.email}}</span>
+            </div>
+            <div>
+                <b>Address: </b> <span>{{profile.address}}</span>
+            </div>
+            <div>
+                <b>Role(s): </b>
+                {% for role in profile.roles.all %}
+                <span>{{role}}</span>,
+                {% endfor %}
+            </div>
+            <a href="" class="btn btn-dark col-2" data-bs-toggle="modal"
+                data-bs-target="#editProfile{{profile.id}}">Edit</a>
         </div>
-        <div class="col-md-8 h-100">
-            <div class="container h-100 d-flex flex-column gap-3">
-                <div>
-                    <b>Fullname: </b> <span>{{profile.user.first_name}} {{profile.user.last_name}}</span>
-                </div>
-                <div>
-                    <b>Email: </b> <span>{{profile.user.email}}</span>
-                </div>
-                <div>
-                    <b>Address: </b> <span>{{profile.address}}</span>
-                </div>
-                <div>
-                    <b>Role(s): </b>
-                    {% for role in profile.roles.all %}
-                        <span>{{role}}</span>,
-                    {% endfor %}
-                </div>
-                <a href="" class="btn btn-dark col-2">Edit</a>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editProfile{{profile.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog /modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{user_form|crispy}}
+                    {{profile_form|crispy}}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-dark">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    {% endblock %}
+{% endblock %}

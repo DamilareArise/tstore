@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category
 from .forms import ProductForm
 from django.contrib.auth.decorators import user_passes_test, login_required
+from .utils import staff_auth
 # Create your views here.
 
 products = [
@@ -125,10 +126,6 @@ products = [
       "count": 470
     }
   }]
-
-
-def staff_auth(user):
-  return user.is_authenticated and user.is_staff
 
 
 def homePageView(request):
