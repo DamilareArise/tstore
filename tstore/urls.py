@@ -26,7 +26,8 @@ urlpatterns = [
     path("", pv.homePageView, name="home"),
     path('product/', include("productApp.urls")),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include('userApp.urls'))
+    path('', include('userApp.urls')),
+    path('order/', include("orderApp.urls"))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

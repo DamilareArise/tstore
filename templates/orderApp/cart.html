@@ -1,0 +1,30 @@
+{% extends "common.html" %}
+    {% block title %} Tstore-cart {% endblock title %}
+    {% block content %}
+    {% load static %}
+        <div class="col-md-6 m-auto my-5 p-2 border">
+        <h3>Cart({{cart_count}})</h3>
+        {% if cart %}
+            {% for item in cart %}
+                <div >
+                    <p>{{item.product.title}}</p>
+                    <div>
+                        <a href="" class="btn btn-dark btn-sm">-</a>
+                        <span class="px-2">{{item.qty}}</span>
+                        <a href="{% url "add-to-cart" item.product.id %}" class="btn btn-dark btn-sm">+</a>
+                    </div>
+                    <div>
+                        <b>Subtotal: </b> <span>${{item.subtotal}}</span>
+                    </div>
+                </div>
+            
+            {% endfor %}
+            <div>
+                <b>Total: </b> <span>${{total}}</span>
+            </div>
+        {% else %}
+            <h4>No Item in cart </h4>
+        {% endif %}
+        </div>
+
+    {% endblock %}

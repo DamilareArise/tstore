@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "productApp",
     'userApp',
+    "orderApp",
     # 3rd party library
     "crispy_forms",
     "crispy_bootstrap5",
@@ -68,6 +69,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "orderApp.context_processors.getCartCount"
             ],
         },
     },
