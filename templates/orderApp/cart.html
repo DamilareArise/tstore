@@ -10,7 +10,7 @@
                     <p>{{item.product.title}}</p>
                     <div>
                         <a href="{% url "remove-item" item.product.id %}" class="btn btn-dark btn-sm">-</a>
-                        <span class="px-2">{{item.qty}}</span>
+                        <span class="px-2">{{item.quantity}}</span>
                         <a href="{% url "add-to-cart" item.product.id %}" class="btn btn-dark btn-sm">+</a>
                     </div>
                     <div>
