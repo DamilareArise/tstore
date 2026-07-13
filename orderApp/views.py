@@ -2,61 +2,39 @@ from django.shortcuts import render, redirect, get_object_or_404
 from productApp.models import Product
 from django.contrib import messages
 from orderApp.models import Cart, CartItem
+from .cart_service import get_cart_items_from_db, get_cart_items_from_session,add_item_to_cart
 # Create your views here.
 
 
 
 
-def getCartView(request):
-    
-    cart_items = []  # [{"product": <product1>, 'qty': 2}, ]
-    total= 0
-    
+def getCartView(request):    
     if request.user.is_authenticated:
         cart_in_session = request.session.get('cart', {})   
         if cart_in_session:
-            pass
-        else:
-           cart, _ = Cart.objects.get_or_create(user=request.user)
-           item_objects = cart.items.all()
-           
-           for item_obj in item_objects:
-                subtotal = item_obj.quantity * item_obj.product.price
-                item = {
-                    "product": item_obj.product,
-                    'quantity': item_obj.quantity,
-                    'subtotal': f"{subtotal:,}"
-                }
-                total += subtotal
-                cart_items.append(item)
-    else:
-        cart = request.session.get('cart', {})
-        # {
-        #     'product_id_1': 1,
-        #     'product_id_2': 1,
-        #     'product_id_3': 1,
-        # }
-        
-        # [('product_id_1', 1), 'product_id_2': 1]
-        
-        
-        for product_id, qty in cart.items():
-            product = get_object_or_404(Product, id=product_id)
-            subtotal = product.price * qty
-            item = {
-                "product": product,
-                'quantity': qty,
-                'subtotal': f"{subtotal:,}"
-            }
+            db_cart, created = Cart.objects.get_or_create(
+            user=request.user
+            )
             
-            cart_items.append(item)
+            # to get the product: check the session
+            for product_id, qty in cart_in_session.items():
+                product = get_object_or_404(Product, id=product_id)    
+                add_item_to_cart(db_cart, product, qty) 
+                           
+            # return the cart
+            cart_items = get_cart_items_from_db(request)
+        
+        else:
+           cart_items = get_cart_items_from_db(request)
+    else:
+        cart_items = get_cart_items_from_session(request)
             
     return render(
         request,
         template_name="orderApp/cart.html",
         context={
-            "cart": cart_items,
-            "total": f"{total:,}"
+            "cart": cart_items['cart'],
+            "total": cart_items['total']
         }
     )
 
@@ -70,18 +48,7 @@ def addToCart(request, product_id):
         db_cart, created = Cart.objects.get_or_create(
             user=request.user
         )
-        
-        cart_item, created = CartItem.objects.get_or_create(
-            cart = db_cart,
-            product = product,
-            defaults={
-                "quantity": 1
-            }
-        )
-        
-        if not created:
-            cart_item.quantity+=1
-            cart_item.save()
+        add_item_to_cart(db_cart, product)
     
     else:
         cart_items = request.session.get('cart', {})
@@ -112,6 +79,17 @@ def addToCart(request, product_id):
     
 def removeItem(request, product_id):
     product_id = str(product_id)
+    
+    if request.user.is_authenticated:
+        cart = get_object_or_404(Cart, user=request.user)
+        cart_item = cart.items.get(product_id=product_id)
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+    
+    
     cart_items = request.session.get('cart', {})
     if product_id in cart_items:
         if cart_items[product_id] > 1:
