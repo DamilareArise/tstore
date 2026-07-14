@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from productApp.models import Product
 from django.contrib import messages
-from orderApp.models import Cart, CartItem
+from orderApp.models import Cart, CartItem, Order, OrderItems
 from .cart_service import get_cart_items_from_db, get_cart_items_from_session,add_item_to_cart
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
 # Create your views here.
 
 
@@ -105,3 +107,62 @@ def removeItem(request, product_id):
         messages.error(request, 'Product not found')
     
     return redirect('get-cart')
+
+
+@login_required
+def checkOut(request):
+    try:
+        with transaction.atomic():
+            cart = get_object_or_404(Cart, user=request.user)
+            order = Order.objects.create(user=request.user)
+            total = 0
+            for item in cart.items.all():
+                order_item = OrderItems.objects.create(
+                    order = order,
+                    product = item.product,
+                    quantity = item.quantity,
+                    price_per_unit = item.product.price
+                )
+                total += order_item.subtotal()
+                
+            order.total_amount = total
+            order.save()
+            cart.items.all().delete()
+            
+            return render(
+                request,
+                template_name="orderApp/order_details.html",
+                context = {
+                    'order': order,
+                    "order_items": order.items.all()
+                }
+            )
+            
+    except Exception as e:
+        messages.error(request, f'ERROR: {e}')
+        return redirect('get-cart')
+    
+    
+@login_required
+def getOrders(request):
+    orders = Order.objects.filter(user = request.user)
+    return render(
+        request,
+        template_name="orderApp/orders.html",
+        context={
+            "orders":orders
+        }
+    )
+    
+@login_required
+def getOrderDetails(request, order_id):
+    order = get_object_or_404(Order, id = order_id, user=request.user)
+    order_items = order.items.all()
+    return render(
+        request,
+        template_name="orderApp/order_details.html",
+        context = {
+            'order': order,
+            "order_items": order_items  
+        }
+    )

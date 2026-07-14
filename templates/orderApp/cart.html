@@ -22,6 +22,8 @@
             <div>
                 <b>Total: </b> <span>${{total}}</span>
             </div>
+
+            <a href="{% url "checkout" %}" class="btn btn-dark">Checkout</a>
         {% else %}
             <h4>No Item in cart </h4>
         {% endif %}

@@ -1,0 +1,41 @@
+{% extends "common.html" %}
+    {% block title %} Tstore-order {% endblock title %}
+    {% block content %}
+    {% load static %}
+        <div class="col-md-6 m-auto my-5 p-2 border">
+        <h3>Order details</h3>
+
+        {% if order_items %}
+        <table class="table">
+            <thead>
+                <th>#</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+            {% for item in order_items %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{item.product.title}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.price_per_unit}}</td>
+                <td>{{order.status}}</td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="m-auto" style="width:fit-content;">
+            {% if order.status == "pending" %}
+                <a href="" class="btn btn-dark m-auto ">Pay</a>
+            {% endif %}
+        </div>
+
+        {% else %}
+            <p>No Item </p>
+        {% endif %}
+        </div>
+
+    {% endblock %}
