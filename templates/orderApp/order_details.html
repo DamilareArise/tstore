@@ -20,8 +20,12 @@
                 <td>{{forloop.counter}}</td>
                 <td>{{item.product.title}}</td>
                 <td>{{item.quantity}}</td>
-                <td>{{item.price_per_unit}}</td>
+                <td>${{item.price_per_unit}}</td>
                 <td>{{order.status}}</td>
+                
+                {% if order.status == "pending" %}
+                <td><a href="#" class="btn btn-sm btn-secondary">Remove Item</a></td>
+                {% endif %}
             </tr>
 
             {% endfor %}

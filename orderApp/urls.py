@@ -7,5 +7,6 @@ urlpatterns = [
     path('remove-item/<int:product_id>/', vw.removeItem, name='remove-item'),
     path('checkout/', vw.checkOut, name='checkout'),
     path('orders/', vw.getOrders, name="orders"),
-    path('order-details/<int:order_id>/', vw.getOrderDetails, name='order-details')
+    path('order-details/<int:order_id>/', vw.getOrderDetails, name='order-details'),
+    path("delete-order/<int:order_id>/",vw.deleteOrder,name="delete-order")
 ]

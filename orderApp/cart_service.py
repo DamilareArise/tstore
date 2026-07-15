@@ -74,3 +74,16 @@ def add_item_to_cart(db_cart:Cart, product:Product, qty:int = 1):
     if not created:
         cart_item.quantity+=qty
         cart_item.save()
+        
+
+def transfer_to_db(request, cart_in_session):
+    db_cart, created = Cart.objects.get_or_create(
+    user=request.user
+    )
+    
+    # to get the product: check the session
+    for product_id, qty in cart_in_session.items():
+        product = get_object_or_404(Product, id=product_id)    
+        add_item_to_cart(db_cart, product, qty)
+        
+    request.session.pop('cart') 

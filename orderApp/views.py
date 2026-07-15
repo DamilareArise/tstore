@@ -12,21 +12,6 @@ from django.db import transaction
 
 def getCartView(request):    
     if request.user.is_authenticated:
-        cart_in_session = request.session.get('cart', {})   
-        if cart_in_session:
-            db_cart, created = Cart.objects.get_or_create(
-            user=request.user
-            )
-            
-            # to get the product: check the session
-            for product_id, qty in cart_in_session.items():
-                product = get_object_or_404(Product, id=product_id)    
-                add_item_to_cart(db_cart, product, qty) 
-                           
-            # return the cart
-            cart_items = get_cart_items_from_db(request)
-        
-        else:
            cart_items = get_cart_items_from_db(request)
     else:
         cart_items = get_cart_items_from_session(request)
@@ -166,3 +151,15 @@ def getOrderDetails(request, order_id):
             "order_items": order_items  
         }
     )
+    
+    
+@login_required
+def deleteOrder(request, order_id):
+    order = get_object_or_404(Order, id = order_id, user=request.user)
+    if order.status == 'pending':
+        order.delete()
+        messages.success(request,'Order deleted')
+    else:
+        messages.info(request,'Only Pending order can be deleted.')
+        
+    return redirect('orders')
